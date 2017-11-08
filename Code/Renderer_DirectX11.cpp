@@ -35,17 +35,20 @@ namespace KtLib
 	}
 	void RendererDirectX11::Release()
 	{
-
+		//スマートポインターで作った物は削除しないように（自動で削除されるので）
 	}
 	void RendererDirectX11::Render()
 	{
 		// バックバッファをクリア
 		Clear();
 		
-		// 描画
-
-
-
+		// 描画処理
+		for (int i = 0; i < eRENDERLAYER_MAX; i++)
+		{
+			RenderSetting(static_cast<eRenderLayer>(i));
+			m_RenderLayer[i].Render();
+			m_RenderLayer[i].Clear();
+		}
 
 		// バックバッファを画面に出す
 		Present();
@@ -104,6 +107,7 @@ namespace KtLib
 		CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(m_outputWidth), static_cast<float>(m_outputHeight));
 		m_d3dContext->RSSetViewports(1, &viewport);
 	}
+
 	// Presents the back buffer contents to the screen.
 	void RendererDirectX11::Present()
 	{
@@ -303,6 +307,35 @@ namespace KtLib
 		CreateDevice();
 
 		CreateResources();
+	}
+
+	void RendererDirectX11::RenderSetting(eRenderLayer eLayer)
+	{
+		//共通設定
+
+
+		//個別設定
+		switch (eLayer)
+		{
+		case eRENDERLAYER_2D_BG:
+			break;
+		case eRENDERLAYER_3D_SKYDOME:
+			break;
+		case eRENDERLAYER_3D_TERRAIN:
+			break;
+		case eRENDERLAYER_3D_OBJECT:
+			//m_RenderLayer[eLayer].ZSortNearToFar();
+			break;
+		case eRENDERLAYER_EFFECT:
+			//m_RenderLayer[eLayer].ZSortFarToNear();
+			break;
+		case eRENDERLAYER_UI:
+			break;
+		case eRENDERLAYER_FADE:
+			break;
+		default:
+			break;
+		}
 	}
 
 

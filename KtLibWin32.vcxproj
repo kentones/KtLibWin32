@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Code\common_Template.h" />
+    <ClInclude Include="Code\Component_Transform.h" />
     <ClInclude Include="Code\Config.h" />
     <ClInclude Include="Code\GameObjectBase.h" />
     <ClInclude Include="Code\GameObjectControllerBase.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\Component_Transform.cpp" />
     <ClCompile Include="Code\GameObjectBase.cpp" />
     <ClCompile Include="Code\GameObjectControllerBase.cpp" />
     <ClCompile Include="Code\RenderableBase.cpp" />

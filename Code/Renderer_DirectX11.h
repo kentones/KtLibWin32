@@ -64,6 +64,8 @@ namespace KtLib
 
 		void OnDeviceLost();
 
+		void RenderSetting( eRenderLayer eLayer);
+
 		// Device resources.
 		HWND                                            m_window;
 		int                                             m_outputWidth;

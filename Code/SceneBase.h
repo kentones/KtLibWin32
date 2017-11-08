@@ -6,11 +6,11 @@ namespace KtLib
 	{
 	public:
 
-		virtual bool Setup()	= 0;
-		virtual bool Init()		= 0;
-		virtual void Release()	= 0;
-		virtual void Update()	= 0;
-		virtual void Render()	= 0;
+		virtual bool Setup()				= 0;
+		virtual bool Init()					= 0;
+		virtual void Release()				= 0;
+		virtual void Update()				= 0;
+		virtual void PushToRenderLayer()	= 0;
 
 	private:
 
@@ -42,7 +42,7 @@ namespace KtLib
 		bool Init()override;
 		void Release()override;
 		void Update()override;
-		void Render()override;
+		void PushToRenderLayer()override;
 
 	private:
 
@@ -55,7 +55,7 @@ namespace KtLib
 		bool Init()override;
 		void Release()override;
 		void Update()override;
-		void Render()override;
+		void PushToRenderLayer()override;
 
 	private:
 

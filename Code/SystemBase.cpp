@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "SystemBase.h"
+#include "SceneBase.h"
 #include "common_Template.h"
 #include "RendererBase.h"
 #include "Renderer_DirectX11.h"
@@ -69,16 +70,16 @@ namespace KtLib
 	void KtSystem::Render()const
 	{
 		//Scene•`‰æ‚·‚éGameObject‚ðRenderer‚É“o˜^‚·‚é
-		/*
-		if (m_pCurrentScene)
-		{
-			m_pCurrentScene->PushToRenderStack();
-		}
-		if (m_pUIScene)
-		{
-			m_pUIScene->PushToRenderStack();
-		}
-		*/
+		
+		//if (m_pCurrentScene)
+		//{
+		//	m_pCurrentScene->PushToRenderLayer();
+		//}
+		//if (m_pUtilityScene)
+		//{
+		//	m_pUtilityScene->PushToRenderLayer();
+		//}
+		
 		//•`‰æ‚·‚é
 		if(m_pRenderer)
 		{
@@ -138,9 +139,11 @@ namespace KtLib
 			SafeReleaseDelete(m_pRenderer);
 		}
 
-		//UI Scene
+		//Utility Scene
+		SafeReleaseDelete(m_pUtilityScene);
 
 		//Current Scene
+		SafeReleaseDelete(m_pCurrentScene);
 
 		return true;
 	}

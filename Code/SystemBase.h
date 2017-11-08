@@ -1,4 +1,5 @@
 #pragma once
+#include <windef.h>
 
 namespace KtLib
 {
@@ -28,7 +29,7 @@ namespace KtLib
 		KtRendererBase*	GetRenderer() { return m_pRenderer; }
 
 	private:
-		KtSystem() : m_pRenderer(nullptr), m_pCurrentScene(nullptr), m_pUIScene(nullptr) {}
+		KtSystem() : m_pRenderer(nullptr), m_pCurrentScene(nullptr), m_pUtilityScene(nullptr) {}
 		~KtSystem() {}
 		bool Init(HWND window, int width, int height);
 		void Release();
@@ -54,7 +55,7 @@ namespace KtLib
 
 		// Scene
 		KtSceneBase*		m_pCurrentScene;
-		KtSceneBase*		m_pUIScene;
+		KtSceneBase*		m_pUtilityScene;
 
 		// GameObject
 

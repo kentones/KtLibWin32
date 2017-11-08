@@ -1,15 +1,36 @@
 #pragma once
 
+#include "RenderableBase.h"
 
 namespace KtLib
 {
+
 	class Transform;
 	class Vertex;
 	class Material;
+	class RenderLayer;
+
+
+
 
 	class KtRendererBase
 	{
 	public:
+
+		
+		enum eRenderLayer
+		{//ï`âÊèáî‘Ç∆ìØÇ∂
+			eRENDERLAYER_2D_BG,
+			eRENDERLAYER_3D_SKYDOME,
+			eRENDERLAYER_3D_TERRAIN,
+			eRENDERLAYER_3D_OBJECT,
+			eRENDERLAYER_EFFECT,
+			eRENDERLAYER_UI,
+			eRENDERLAYER_FADE,
+			eRENDERLAYER_MAX
+		};
+
+
 		virtual bool Init(HWND window, int width, int height) = 0;
 		virtual void Release() = 0;
 		virtual void Render() = 0;
@@ -21,7 +42,8 @@ namespace KtLib
 		virtual void OnResuming() {};
 		virtual void OnWindowSizeChanged(int width, int height) {};
 
-
+		// Render Layer Access
+		void PushToRenderLayer(KtRenderableBase* pRenderable, eRenderLayer eLayer);
 
 
 
@@ -32,8 +54,9 @@ namespace KtLib
 
 		//ÇRÇc
 		virtual void RenderBillBoard(const Transform& inTransform, const Material& inMaterial)const {}
+		virtual void RenderPrimtive(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, bool isTriangleStrip) const{}
 		virtual void RenderIndexed(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
-
+		
 
 		// Debug Shape
 		// 2D
@@ -49,7 +72,8 @@ namespace KtLib
 		virtual void DbgRenderCone(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
 
 
-	private:
+	protected:
+		RenderLayer m_RenderLayer[eRENDERLAYER_MAX];
 
 	};
 
