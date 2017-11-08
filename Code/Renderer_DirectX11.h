@@ -1,5 +1,8 @@
 #pragma once
-#include <stdio.h>
+
+#include <DirectXMath.h>
+#include <d3d11_1.h>
+#include "RendererBase.h"
 
 namespace KtLib
 {
@@ -7,37 +10,88 @@ namespace KtLib
 	class Vertex;
 	class Material;
 
-	class KtRendererBase
+	class RendererDirectX11 : public KtRendererBase
 	{
 	public:
-		virtual bool Init() = 0;
-		virtual void Release() = 0;
+		RendererDirectX11();
 
-		//ŠeŽí•`‰æ
+		bool Init(HWND window, int width, int height)override;
+		void Release()override;
+		void Render()override;
+
+		// Messages
+		void OnActivated()override;
+		void OnDeactivated()override;
+		void OnSuspending()override;
+		void OnResuming()override;
+		void OnWindowSizeChanged(int width, int height)override;
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////
+		// ŠeŽí•`‰æ
+		//////////////////////////////////////////////////////////////////////////////////
 		//‚Q‚c
-		virtual void DrawRect(float posX, float posY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
-		virtual void DrawRectCenter(float centerX, float centerY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
+		void DrawRect(float posX, float posY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
+		void DrawRectCenter(float centerX, float centerY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
 
 		//‚R‚c
-		virtual void RenderBillBoard(const Transform& inTransform, const Material& inMaterial)const {}
-		virtual void RenderIndexed(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
+		void RenderBillBoard(const Transform& inTransform, const Material& inMaterial)const {}
+		void RenderIndexed(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
 
 
 		// Debug Shape
 		// 2D
-		virtual void DbgDrawRect		(float posX, float posY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
-		virtual void DbgDrawRectCenter	(float centerX, float centerY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
-		virtual void DbgDrawCircle		(float posX, float posY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
-		virtual void DbgDrawCircleCenter(float centerX, float centerY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
+		void DbgDrawRect		(float posX, float posY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
+		void DbgDrawRectCenter	(float centerX, float centerY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
+		void DbgDrawCircle		(float posX, float posY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
+		void DbgDrawCircleCenter(float centerX, float centerY, float sizeX, float sizeY)const {/*Alert("not overrided!");*/ }
 
 		// 3D
-		virtual void DbgRenderBox(const Transform& inTransform, const Material& inMaterial)const {}
-		virtual void DbgRenderSphere(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
-		virtual void DbgRenderCylinder(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
-		virtual void DbgRenderCone(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
+		void DbgRenderBox(const Transform& inTransform, const Material& inMaterial)const {}
+		void DbgRenderSphere(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
+		void DbgRenderCylinder(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
+		void DbgRenderCone(const Transform& inTransform, const Material& inMaterial, const Vertex* inVertex, const int* inIndex, bool isTriangleStrip)const {}
 
 
 	private:
+
+		void Clear();
+		void Present();
+
+		void CreateDevice();
+		void CreateResources();
+
+		void OnDeviceLost();
+
+		// Device resources.
+		HWND                                            m_window;
+		int                                             m_outputWidth;
+		int                                             m_outputHeight;
+
+		D3D_FEATURE_LEVEL                               m_featureLevel;
+		Microsoft::WRL::ComPtr<ID3D11Device1>           m_d3dDevice;
+		Microsoft::WRL::ComPtr<ID3D11DeviceContext1>    m_d3dContext;
+
+		Microsoft::WRL::ComPtr<IDXGISwapChain1>         m_swapChain;
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_renderTargetView;
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	};
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <stdio.h>
+
 
 namespace KtLib
 {
@@ -10,8 +10,20 @@ namespace KtLib
 	class KtRendererBase
 	{
 	public:
-		virtual bool Init() = 0;
+		virtual bool Init(HWND window, int width, int height) = 0;
 		virtual void Release() = 0;
+		virtual void Render() = 0;
+
+		// Messages
+		virtual void OnActivated() {};
+		virtual void OnDeactivated() {};
+		virtual void OnSuspending() {};
+		virtual void OnResuming() {};
+		virtual void OnWindowSizeChanged(int width, int height) {};
+
+
+
+
 
 		//ŠeŽí•`‰æ
 		//‚Q‚c

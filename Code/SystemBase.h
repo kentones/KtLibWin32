@@ -9,11 +9,11 @@ namespace KtLib
 	{
 	public:
 		//シングルトン
-		static bool			Create();
+		static bool			Create(HWND window, int width, int height);
 		static void			Destory();
 		static KtSystem*	GetInstance() { return s_pInstance; }
 
-		void Update();
+		void Update(float elapsedTime);
 		void Render()const;
 
 		//Windows コントロール関連
@@ -22,9 +22,6 @@ namespace KtLib
 		void OnSuspending();	//Game is being power-suspended (or minimized)
 		void OnResuming();		//Game is being power-resumed (or returning from minimize)
 		void OnWindowSizeChanged(int width, int height);
-		void InitWindowSizeIndependentObjects();	// void Game::CreateDevice()
-		void InitWindowSizeDependentObjects();		// void Game::CreateResources()
-		void OnDeviceLost();	//Add Direct3D resource cleanup here
 
 
 		//インスタンス取得関数
@@ -33,7 +30,7 @@ namespace KtLib
 	private:
 		KtSystem() : m_pRenderer(nullptr), m_pCurrentScene(nullptr), m_pUIScene(nullptr) {}
 		~KtSystem() {}
-		bool Init();
+		bool Init(HWND window, int width, int height);
 		void Release();
 
 	

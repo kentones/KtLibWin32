@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "Game.h"
+#include "Code\Config.h"
 
 using namespace DirectX;
 
@@ -57,7 +58,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
         // Create window
         int w, h;
-        g_game->GetDefaultSize(w, h);
+		w = KtLib::sc_DefScreenWidth;
+		h = KtLib::sc_DefScreenHeight;
 
         RECT rc;
         rc.top = 0;
@@ -100,7 +102,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             g_game->Tick();
         }
     }
-
+	g_game->DestoryKtSystem();
     g_game.reset();
 
     CoUninitialize();
@@ -223,10 +225,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 SetWindowLongPtr(hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
                 SetWindowLongPtr(hWnd, GWL_EXSTYLE, 0);
 
-                int width = 800;
-                int height = 600;
-                if (game)
-                    game->GetDefaultSize(width, height);
+                int width = KtLib::sc_DefScreenWidth;
+                int height = KtLib::sc_DefScreenHeight;
 
                 ShowWindow(hWnd, SW_SHOWNORMAL);
 

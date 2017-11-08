@@ -35,6 +35,9 @@
     <Filter Include="KtLib\Renderer\Renderable">
       <UniqueIdentifier>{a2828ecf-d800-4c94-b08d-3d8fc0c79337}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KtLib\Config">
+      <UniqueIdentifier>{643481a2-f173-4599-b489-53eabe0c1b7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -61,6 +64,12 @@
     <ClInclude Include="Code\RenderableBase.h">
       <Filter>KtLib\Renderer\Renderable</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Renderer_DirectX11.h">
+      <Filter>KtLib\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Config.h">
+      <Filter>KtLib\Config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -83,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="Code\RenderableBase.cpp">
       <Filter>KtLib\Renderer\Renderable</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Renderer_DirectX11.cpp">
+      <Filter>KtLib\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
