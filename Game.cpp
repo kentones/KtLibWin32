@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "Game.h"
 
+#include "Code\SystemBase.h"
+
 extern void ExitGame();
 
 using namespace DirectX;
@@ -32,10 +34,13 @@ void Game::Initialize(HWND window, int width, int height)
 
     // TODO: Change the timer settings if you want something other than the default variable timestep mode.
     // e.g. for 60 FPS fixed timestep update logic, call:
-    /*
+    
     m_timer.SetFixedTimeStep(true);
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
-    */
+    
+
+	// ‰Šú‰»
+	KtLib::KtSystem::Create();
 }
 
 // Executes the basic game loop.
@@ -55,6 +60,8 @@ void Game::Update(DX::StepTimer const& timer)
     float elapsedTime = float(timer.GetElapsedSeconds());
 
     // TODO: Add your game logic here.
+	KtLib::KtSystem::GetInstance()->Update();
+
     elapsedTime;
 }
 
@@ -70,6 +77,7 @@ void Game::Render()
     Clear();
 
     // TODO: Add your rendering code here.
+	KtLib::KtSystem::GetInstance()->Render();
 
     Present();
 }
@@ -77,6 +85,9 @@ void Game::Render()
 // Helper method to clear the back buffers.
 void Game::Clear()
 {
+	// I—¹ˆ—
+	KtLib::KtSystem::Destory();
+
     // Clear the views.
     m_d3dContext->ClearRenderTargetView(m_renderTargetView.Get(), Colors::CornflowerBlue);
     m_d3dContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -111,16 +122,20 @@ void Game::Present()
 void Game::OnActivated()
 {
     // TODO: Game is becoming active window.
+	KtLib::KtSystem::GetInstance()->OnActivated();
+
 }
 
 void Game::OnDeactivated()
 {
     // TODO: Game is becoming background window.
+	KtLib::KtSystem::GetInstance()->OnDeactivated();
 }
 
 void Game::OnSuspending()
 {
     // TODO: Game is being power-suspended (or minimized).
+	KtLib::KtSystem::GetInstance()->OnSuspending();
 }
 
 void Game::OnResuming()
@@ -128,6 +143,7 @@ void Game::OnResuming()
     m_timer.ResetElapsedTime();
 
     // TODO: Game is being power-resumed (or returning from minimize).
+	KtLib::KtSystem::GetInstance()->OnResuming();
 }
 
 void Game::OnWindowSizeChanged(int width, int height)
@@ -138,14 +154,15 @@ void Game::OnWindowSizeChanged(int width, int height)
     CreateResources();
 
     // TODO: Game window is being resized.
+	KtLib::KtSystem::GetInstance()->OnWindowSizeChanged(width, height);
 }
 
 // Properties
 void Game::GetDefaultSize(int& width, int& height) const
 {
     // TODO: Change to desired default window size (note minimum size is 320x200).
-    width = 800;
-    height = 600;
+    width = 1280;
+    height = 720;
 }
 
 // These are the resources that depend on the device.
@@ -213,6 +230,8 @@ void Game::CreateDevice()
     DX::ThrowIfFailed(context.As(&m_d3dContext));
 
     // TODO: Initialize device dependent objects here (independent of window size).
+	KtLib::KtSystem::GetInstance()->InitWindowSizeIndependentObjects();
+
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -309,11 +328,14 @@ void Game::CreateResources()
     DX::ThrowIfFailed(m_d3dDevice->CreateDepthStencilView(depthStencil.Get(), &depthStencilViewDesc, m_depthStencilView.ReleaseAndGetAddressOf()));
 
     // TODO: Initialize windows-size dependent objects here.
+	KtLib::KtSystem::GetInstance()->InitWindowSizeDependentObjects();
 }
 
 void Game::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
+	KtLib::KtSystem::GetInstance()->OnDeviceLost();
+
 
     m_depthStencilView.Reset();
     m_renderTargetView.Reset();

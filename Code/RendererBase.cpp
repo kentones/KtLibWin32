@@ -1,0 +1,4 @@
+namespace KtLib
+{
+
+}	//namespace KtLib

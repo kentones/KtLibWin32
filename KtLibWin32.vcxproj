@@ -150,11 +150,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Code\common_Template.h" />
+    <ClInclude Include="Code\GameObjectBase.h" />
+    <ClInclude Include="Code\GameObjectControllerBase.h" />
+    <ClInclude Include="Code\RenderableBase.h" />
+    <ClInclude Include="Code\RendererBase.h" />
+    <ClInclude Include="Code\SceneBase.h" />
+    <ClInclude Include="Code\SystemBase.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="StepTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\GameObjectBase.cpp" />
+    <ClCompile Include="Code\GameObjectControllerBase.cpp" />
+    <ClCompile Include="Code\RenderableBase.cpp" />
+    <ClCompile Include="Code\RendererBase.cpp" />
+    <ClCompile Include="Code\SceneBase.cpp" />
+    <ClCompile Include="Code\SystemBase.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">

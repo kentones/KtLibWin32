@@ -5,16 +5,85 @@
       <UniqueIdentifier>46667d49-e83f-487c-bf88-8f40023509ba</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="KtLib">
+      <UniqueIdentifier>{c4cf4b9a-b898-4434-90c1-abd2affb17d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\Renderer">
+      <UniqueIdentifier>{df592db5-878b-4c93-ab6b-a24795b61089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\Common">
+      <UniqueIdentifier>{812a5fcb-1403-4b76-a322-f2172be194b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\GameObject">
+      <UniqueIdentifier>{4cd1bf06-2074-4a21-929e-adbafcff5f4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\Component">
+      <UniqueIdentifier>{b5cbc557-8fc5-41b7-b23b-3b51022d34bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\Scene">
+      <UniqueIdentifier>{3cedadfe-24b0-4a7f-939d-ad34228e809a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\System">
+      <UniqueIdentifier>{a8f50aa7-1e49-4a7b-b6f2-568628d84001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\GameObject\GameObjectController">
+      <UniqueIdentifier>{dd0f59d6-976c-46ea-9a99-fe162397cf66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\Collision">
+      <UniqueIdentifier>{f7ef6fa6-f9d3-41d5-86e0-da7066a92db1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\Renderer\Renderable">
+      <UniqueIdentifier>{a2828ecf-d800-4c94-b08d-3d8fc0c79337}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="StepTimer.h" />
+    <ClInclude Include="Code\common_Template.h">
+      <Filter>KtLib\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\RendererBase.h">
+      <Filter>KtLib\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\SceneBase.h">
+      <Filter>KtLib\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\SystemBase.h">
+      <Filter>KtLib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\GameObjectBase.h">
+      <Filter>KtLib\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\GameObjectControllerBase.h">
+      <Filter>KtLib\GameObject\GameObjectController</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\RenderableBase.h">
+      <Filter>KtLib\Renderer\Renderable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Code\RendererBase.cpp">
+      <Filter>KtLib\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\SceneBase.cpp">
+      <Filter>KtLib\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\SystemBase.cpp">
+      <Filter>KtLib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\GameObjectBase.cpp">
+      <Filter>KtLib\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\GameObjectControllerBase.cpp">
+      <Filter>KtLib\GameObject\GameObjectController</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\RenderableBase.cpp">
+      <Filter>KtLib\Renderer\Renderable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
