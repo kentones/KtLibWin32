@@ -9,9 +9,8 @@ namespace KtLib
 	class Vertex;
 	class Material;
 	class RenderLayer;
-
-
-
+	class KtVertexBufferBase;
+	class KtConstantBufferBase;
 
 	class KtRendererBase
 	{
@@ -41,6 +40,14 @@ namespace KtLib
 		virtual void OnSuspending() {};
 		virtual void OnResuming() {};
 		virtual void OnWindowSizeChanged(int width, int height) {};
+
+		//////////////////////////////////////////////////////////////////////////////////
+		// 頂点バッファ作り
+		//////////////////////////////////////////////////////////////////////////////////
+		virtual bool CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBufferBase* pOut) = 0;
+		virtual bool CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut) = 0;
+
+		virtual void SetVertexBuffer(KtVertexBufferBase* const pIn) = 0;
 
 		// Render Layer Access
 		void PushToRenderLayer(KtRenderableBase* pRenderable, eRenderLayer eLayer);
@@ -76,6 +83,7 @@ namespace KtLib
 		RenderLayer m_RenderLayer[eRENDERLAYER_MAX];
 
 	};
+
 
 
 

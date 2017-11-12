@@ -76,7 +76,7 @@ namespace KtLib
 		{
 			m_ZSortCamera = cameraTransform;
 		}
-
+		
 	private:
 
 		Transform m_ZSortCamera;

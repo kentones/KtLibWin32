@@ -38,6 +38,12 @@
     <Filter Include="KtLib\Config">
       <UniqueIdentifier>{643481a2-f173-4599-b489-53eabe0c1b7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KtLib\Renderer\GraphicBuffer">
+      <UniqueIdentifier>{f7f814a9-d346-469b-9bf7-eb7f6ec785c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KtLib\Renderer\Shader">
+      <UniqueIdentifier>{a061ca08-57ac-4c0c-9568-28e0fca93405}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -73,6 +79,12 @@
     <ClInclude Include="Code\Component_Transform.h">
       <Filter>KtLib\Component</Filter>
     </ClInclude>
+    <ClInclude Include="Code\GraphicBufferBase.h">
+      <Filter>KtLib\Renderer\GraphicBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\GraphicBuffer_DirectX11.h">
+      <Filter>KtLib\Renderer\GraphicBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -101,6 +113,12 @@
     </ClCompile>
     <ClCompile Include="Code\Component_Transform.cpp">
       <Filter>KtLib\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\GraphicBufferBase.cpp">
+      <Filter>KtLib\Renderer\GraphicBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\GraphicBuffer_DirectX11.cpp">
+      <Filter>KtLib\Renderer\GraphicBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

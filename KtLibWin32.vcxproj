@@ -155,6 +155,8 @@
     <ClInclude Include="Code\Config.h" />
     <ClInclude Include="Code\GameObjectBase.h" />
     <ClInclude Include="Code\GameObjectControllerBase.h" />
+    <ClInclude Include="Code\GraphicBufferBase.h" />
+    <ClInclude Include="Code\GraphicBuffer_DirectX11.h" />
     <ClInclude Include="Code\RenderableBase.h" />
     <ClInclude Include="Code\RendererBase.h" />
     <ClInclude Include="Code\Renderer_DirectX11.h" />
@@ -168,6 +170,8 @@
     <ClCompile Include="Code\Component_Transform.cpp" />
     <ClCompile Include="Code\GameObjectBase.cpp" />
     <ClCompile Include="Code\GameObjectControllerBase.cpp" />
+    <ClCompile Include="Code\GraphicBufferBase.cpp" />
+    <ClCompile Include="Code\GraphicBuffer_DirectX11.cpp" />
     <ClCompile Include="Code\RenderableBase.cpp" />
     <ClCompile Include="Code\RendererBase.cpp" />
     <ClCompile Include="Code\Renderer_DirectX11.cpp" />

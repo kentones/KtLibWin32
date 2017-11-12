@@ -22,7 +22,15 @@ namespace KtLib
 			(p) = nullptr;
 		}
 	}
-
+	template <typename T>
+	inline void SafeRelease(T*& p)
+	{
+		if (p != nullptr)
+		{
+			(p)->Release();
+			(p) = nullptr;
+		}
+	}
 	template <typename T>
 	inline void SafeReleaseDelete(T*& p)
 	{

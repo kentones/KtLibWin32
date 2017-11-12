@@ -1,7 +1,8 @@
 #pragma once
-
+#include "../pch.h"
 #include <DirectXMath.h>
 #include <d3d11_1.h>
+#include "common_Template.h"
 #include "RendererBase.h"
 
 namespace KtLib
@@ -26,6 +27,32 @@ namespace KtLib
 		void OnResuming()override;
 		void OnWindowSizeChanged(int width, int height)override;
 
+		// Vertex Buffer
+
+		bool CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBufferBase* pOut)override;
+		bool CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut)override;
+		void SetVertexBuffer(KtVertexBufferBase* const pIn)override;
+
+		void SetPrimitiveTopology( /* topology type */ );
+
+		void SetInputLayout( /* input layout type */ );
+
+		// Shader
+		bool SetupShader(); //全体シェーダー設定
+		bool _CreateVertexShader();
+		void SetVertexShader( /* vertex shader */ );
+		bool _CreatePixelShader();
+		void SetPixelShader( /* pixel shader */ );
+		
+		bool SetupInputLayout();
+		bool SetupSampler();
+		void SetSampler();
+
+		// Constant Buffer
+		bool CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBufferBase* pOut );
+		void UpdateConstantBuffer( const void* pDataIn, KtConstantBufferBase* pOut );
+		void VSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn );
+		void PSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn );
 
 
 		//////////////////////////////////////////////////////////////////////////////////
@@ -80,22 +107,13 @@ namespace KtLib
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	};
+
+
+
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "Renderer_DirectX11.h"
+#include "GraphicBuffer_DirectX11.h"
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
@@ -86,6 +87,165 @@ namespace KtLib
 		CreateResources();
 
 		// TODO: Game window is being resized.
+	}
+
+	// Vertex Buffer
+	bool RendererDirectX11::CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBufferBase* pOut)
+	{
+		VertexBufferDirectX11* pOutBufferTemp = nullptr;
+		pOutBufferTemp = new VertexBufferDirectX11;
+		if (!pOutBufferTemp) 
+		{
+			return false;
+		}
+
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = singleVertexBytes * totalVertex;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		D3D11_SUBRESOURCE_DATA InitData;
+		ZeroMemory(&InitData, sizeof(InitData));
+		InitData.pSysMem = pVertexDataIn;
+		if (FAILED(m_d3dDevice->CreateBuffer(&bd, &InitData, &pOutBufferTemp->m_pVtxBuffer)))
+		{
+			delete pOutBufferTemp;
+			return false;
+		}
+		pOutBufferTemp->m_SingleVertexBytes = singleVertexBytes;
+		pOutBufferTemp->m_VertexBufferType = KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEX;
+		pOut = pOutBufferTemp;
+		return true;
+	}
+
+	bool RendererDirectX11::CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut)
+	{
+		VertexBufferIndexedDirectX11* pOutBufferTemp = nullptr;
+		pOutBufferTemp = new VertexBufferIndexedDirectX11;
+		if (!pOutBufferTemp)
+		{
+			return false;
+		}
+
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = singleVertexBytes * totalVertex;
+		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		D3D11_SUBRESOURCE_DATA InitData;
+		ZeroMemory(&InitData, sizeof(InitData));
+		InitData.pSysMem = pVertexDataIn;
+		if (FAILED(m_d3dDevice->CreateBuffer(&bd, &InitData, &pOutBufferTemp->m_pVtxBuffer)))
+		{
+			delete pOutBufferTemp;
+			return false;
+		}
+
+		// Create index buffer
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.ByteWidth = sizeof(unsigned int) * totalIndex;
+		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		bd.CPUAccessFlags = 0;
+		InitData.pSysMem = pIndexDataIn;
+		if (FAILED(m_d3dDevice->CreateBuffer(&bd, &InitData, &pOutBufferTemp->m_pIdxBuffer)))
+		{
+			delete pOutBufferTemp;
+			return false;
+		}
+		pOutBufferTemp->m_SingleVertexBytes = singleVertexBytes;
+		pOutBufferTemp->m_VertexBufferType = KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEXINDEXED;
+		pOut = pOutBufferTemp;
+
+		return true;
+
+	}
+
+	void RendererDirectX11::SetVertexBuffer(KtVertexBufferBase* const pIn)
+	{
+		switch ( pIn->GetType() )
+		{
+		case KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEX:
+			{
+				VertexBufferDirectX11* pTempIn = static_cast<VertexBufferDirectX11*>(pIn);
+				m_d3dContext->IASetVertexBuffers(0, 1, &pTempIn->m_pVtxBuffer, &pTempIn->m_SingleVertexBytes, 0);
+			}
+			break;
+
+		case KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEXINDEXED:
+			{
+				VertexBufferIndexedDirectX11* pTempIn = static_cast<VertexBufferIndexedDirectX11*>(pIn);
+				m_d3dContext->IASetVertexBuffers(0, 1, &pTempIn->m_pVtxBuffer, &pTempIn->m_SingleVertexBytes, 0);
+				m_d3dContext->IASetIndexBuffer(pTempIn->m_pIdxBuffer, DXGI_FORMAT_R32_UINT, 0);
+			}
+			break;
+		}
+	}
+
+	// Constant Buffer
+	bool RendererDirectX11::CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBufferBase* pOut)
+	{
+		ConstantBufferDirectX11* pOutBufferTemp = nullptr;
+		pOutBufferTemp = new ConstantBufferDirectX11;
+		if (!pOutBufferTemp)
+		{
+			return false;
+		}
+
+		D3D11_BUFFER_DESC bd;
+		ZeroMemory(&bd, sizeof(bd));
+		bd.Usage = D3D11_USAGE_DEFAULT;
+		bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		bd.CPUAccessFlags = 0;
+		bd.ByteWidth = structSizeBytes;
+
+		if (FAILED(m_d3dDevice->CreateBuffer(&bd, nullptr, &pOutBufferTemp->m_pConstantBuffer)))
+		{
+			delete pOutBufferTemp;
+			return false;
+		}
+
+		pOutBufferTemp->m_ConstantBufferType = KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11;
+		pOut = pOutBufferTemp;
+		return true;
+
+	}
+	void RendererDirectX11::UpdateConstantBuffer(const void* pDataIn, KtConstantBufferBase* pOut)
+	{
+		switch (pOut->GetType())
+		{
+		case KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11:
+			{
+				ConstantBufferDirectX11* pTemp = static_cast<ConstantBufferDirectX11*>(pOut);
+				m_d3dContext->UpdateSubresource(pTemp->m_pConstantBuffer, 0, nullptr, pDataIn, 0, 0);
+			}
+			break;
+		}
+	}
+	void RendererDirectX11::VSSetConstantBuffer(unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn)
+	{
+		switch (pIn->GetType())
+		{
+		case KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11:
+			{
+				ConstantBufferDirectX11* pTemp = static_cast<ConstantBufferDirectX11*>(pIn);
+				m_d3dContext->VSSetConstantBuffers(slot, numBuffers, &pTemp->m_pConstantBuffer);
+			}
+			break;
+		}
+	}
+	void RendererDirectX11::PSSetConstantBuffer(unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn)
+	{
+		switch (pIn->GetType())
+		{
+		case KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11:
+			{
+				ConstantBufferDirectX11* pTemp = static_cast<ConstantBufferDirectX11*>(pIn);
+				m_d3dContext->PSSetConstantBuffers(slot, numBuffers, &pTemp->m_pConstantBuffer);
+			}
+		break;
+		}
 	}
 
 
@@ -312,7 +472,7 @@ namespace KtLib
 	void RendererDirectX11::RenderSetting(eRenderLayer eLayer)
 	{
 		//ã§í ê›íË
-
+		
 
 		//å¬ï ê›íË
 		switch (eLayer)
@@ -337,6 +497,27 @@ namespace KtLib
 			break;
 		}
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////
+	// Vertex Buffer
+	//////////////////////////////////////////////////////////////////////////////////
+		// Public
+		//////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////
+		// Private
+		//////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 
 
 }	//namespace KtLib
