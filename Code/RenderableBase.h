@@ -11,6 +11,7 @@ namespace KtLib
 	//今回使うものをSetup()ないで読み込む
 	//Render()内でKtRendererBase::描画機能を使って描画する
 
+	class KtVertexBufferBase;
 
 
 
@@ -23,8 +24,22 @@ namespace KtLib
 		//Priority と RenderTargetはどうしますか？
 		virtual void Render()	= 0;	//描画
 	private:
-
 	};
+
+
+
+	class RenderableRect : public KtRenderableBase
+	{
+	public:
+		bool Setup()override;
+		void Render()override;
+
+
+	private:
+		KtVertexBufferBase* m_pVtxBuffer;
+	};
+
+
 
 	class RenderableModel : public KtRenderableBase
 	{
@@ -34,6 +49,8 @@ namespace KtLib
 	private:
 
 	};
+
+
 
 	//Model
 	//Skin with animation

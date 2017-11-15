@@ -27,13 +27,6 @@ namespace KtLib
 		void OnResuming()override;
 		void OnWindowSizeChanged(int width, int height)override;
 
-		// Vertex Buffer
-
-		bool CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBufferBase* pOut)override;
-		bool CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut)override;
-		void SetVertexBuffer(KtVertexBufferBase* const pIn)override;
-
-		void SetPrimitiveTopology( /* topology type */ );
 
 		void SetInputLayout( /* input layout type */ );
 
@@ -44,15 +37,27 @@ namespace KtLib
 		bool _CreatePixelShader();
 		void SetPixelShader( /* pixel shader */ );
 		
-		bool SetupInputLayout();
-		bool SetupSampler();
-		void SetSampler();
 
-		// Constant Buffer
+		// Vertex Buffer (only call by Renderable class)
+		bool CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBufferBase* pOut)override;
+		bool CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut)override;
+		void SetVertexBuffer(KtVertexBufferBase* const pIn)override;
+		void SetPrimitiveTopology(ePrimitiveTopology topology)override;
+
+		// Constant Buffer (only call by Renderable class)
 		bool CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBufferBase* pOut );
 		void UpdateConstantBuffer( const void* pDataIn, KtConstantBufferBase* pOut );
 		void VSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn );
 		void PSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn );
+
+
+		void DrawPrimitive( unsigned int totalVertex )override;
+		void DrawPrimitiveIndexed(unsigned int totalIndex)override;
+
+
+		bool SetupInputLayout();
+		bool SetupSampler();
+		void SetSampler();
 
 
 		//////////////////////////////////////////////////////////////////////////////////

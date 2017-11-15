@@ -1,4 +1,5 @@
 #pragma once
+#include "..\pch.h"
 
 #include "RenderableBase.h"
 
@@ -28,7 +29,16 @@ namespace KtLib
 			eRENDERLAYER_FADE,
 			eRENDERLAYER_MAX
 		};
-
+		enum ePrimitiveTopology
+		{
+			ePRIMITIVETOPOLOGY_UNDEFINED,
+			ePRIMITIVETOPOLOGY_POINTLIST,
+			ePRIMITIVETOPOLOGY_LINELIST,
+			ePRIMITIVETOPOLOGY_LINESTRIP,
+			ePRIMITIVETOPOLOGY_TRIANGLELIST,
+			ePRIMITIVETOPOLOGY_TRIANGLESTRIP,
+			ePRIMITIVETOPOLOGY_MAX
+		};
 
 		virtual bool Init(HWND window, int width, int height) = 0;
 		virtual void Release() = 0;
@@ -52,6 +62,9 @@ namespace KtLib
 		// Render Layer Access
 		void PushToRenderLayer(KtRenderableBase* pRenderable, eRenderLayer eLayer);
 
+		virtual void SetPrimitiveTopology(ePrimitiveTopology topology) = 0;
+		virtual void DrawPrimitive(unsigned int totalVertex) = 0;
+		virtual void DrawPrimitiveIndexed(unsigned int totalIndex) = 0;
 
 
 		//ŠeŽí•`‰æ

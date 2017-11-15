@@ -6,6 +6,20 @@
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
+namespace
+{
+	// KtRendererBase‚Ì primitive topology‚ðD3DX11‚É•ÏŠ·
+	static const D3D_PRIMITIVE_TOPOLOGY sc_PrimitiveTopologyTable[KtLib::KtRendererBase::ePrimitiveTopology::ePRIMITIVETOPOLOGY_MAX] =
+	{
+		D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED,
+		D3D11_PRIMITIVE_TOPOLOGY_POINTLIST,
+		D3D11_PRIMITIVE_TOPOLOGY_LINELIST,
+		D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP,
+		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP
+	};
+}
+
 
 namespace KtLib
 {
@@ -63,22 +77,18 @@ namespace KtLib
 		// TODO: Game is becoming active window.
 
 	}
-
 	void RendererDirectX11::OnDeactivated()
 	{
 		// TODO: Game is becoming background window.
 	}
-
 	void RendererDirectX11::OnSuspending()
 	{
 		// TODO: Game is being power-suspended (or minimized).
 	}
-
 	void RendererDirectX11::OnResuming()
 	{
 		// TODO: Game is being power-resumed (or returning from minimize).
 	}
-
 	void RendererDirectX11::OnWindowSizeChanged(int width, int height)
 	{
 		m_outputWidth = std::max(width, 1);
@@ -118,7 +128,6 @@ namespace KtLib
 		pOut = pOutBufferTemp;
 		return true;
 	}
-
 	bool RendererDirectX11::CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut)
 	{
 		VertexBufferIndexedDirectX11* pOutBufferTemp = nullptr;
@@ -161,7 +170,6 @@ namespace KtLib
 		return true;
 
 	}
-
 	void RendererDirectX11::SetVertexBuffer(KtVertexBufferBase* const pIn)
 	{
 		switch ( pIn->GetType() )
@@ -181,6 +189,10 @@ namespace KtLib
 			}
 			break;
 		}
+	}
+	void RendererDirectX11::SetPrimitiveTopology(ePrimitiveTopology topology)
+	{
+		m_d3dContext->IASetPrimitiveTopology(sc_PrimitiveTopologyTable[topology]);
 	}
 
 	// Constant Buffer
@@ -248,7 +260,15 @@ namespace KtLib
 		}
 	}
 
-
+	// DrawPrimitive
+	void RendererDirectX11::DrawPrimitive(unsigned int totalVertex)
+	{
+		m_d3dContext->Draw(totalVertex, 0);
+	}
+	void RendererDirectX11::DrawPrimitiveIndexed(unsigned int totalIndex)
+	{
+		m_d3dContext->DrawIndexed(totalIndex, 0, 0);
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// Private
