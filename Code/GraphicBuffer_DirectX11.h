@@ -2,7 +2,6 @@
 
 #include <d3d11_1.h>
 #include "common_Template.h"
-#include "GraphicBufferBase.h"
 
 namespace KtLib
 {
@@ -10,46 +9,48 @@ namespace KtLib
 	// Vertex Buffer
 	//////////////////////////////////////////////////////////////////////////////////
 
-	class VertexBufferDirectX11 : public KtVertexBufferBase
+	class KtVertexBuffer
 	{
-		friend class RendererDirectX11;
+		friend class KtRenderer;
 	public:
-		VertexBufferDirectX11():m_pVtxBuffer(nullptr){}
-		~VertexBufferDirectX11()
+		KtVertexBuffer():m_pVtxBuffer(nullptr){}
+		~KtVertexBuffer()
 		{
 			SafeRelease(m_pVtxBuffer);
 		}
 
 	protected:
-		ID3D11Buffer* m_pVtxBuffer;
+		unsigned int	m_SingleVertexBytes;
+		ID3D11Buffer*	m_pVtxBuffer;
 
 	};
 
-	class VertexBufferIndexedDirectX11 : public KtVertexBufferBase
+	class KtVertexBufferIndexed
 	{
-		friend class RendererDirectX11;
+		friend class KtRenderer;
 	public:
-		VertexBufferIndexedDirectX11() :m_pVtxBuffer(nullptr), m_pIdxBuffer(nullptr) {}
-		~VertexBufferIndexedDirectX11()
+		KtVertexBufferIndexed() :m_pVtxBuffer(nullptr), m_pIdxBuffer(nullptr) {}
+		~KtVertexBufferIndexed()
 		{
 			SafeRelease(m_pVtxBuffer);
 			SafeRelease(m_pIdxBuffer);
 		}
 	protected:
-		ID3D11Buffer* m_pVtxBuffer;
-		ID3D11Buffer* m_pIdxBuffer;
+		unsigned int	m_SingleVertexBytes;
+		ID3D11Buffer*	m_pVtxBuffer;
+		ID3D11Buffer*	m_pIdxBuffer;
 
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////
 	// Constant Buffer
 	//////////////////////////////////////////////////////////////////////////////////
-	class ConstantBufferDirectX11 : public KtConstantBufferBase
+	class KtConstantBuffer
 	{
-		friend class RendererDirectX11;
+		friend class KtRenderer;
 	public:
-		ConstantBufferDirectX11() :m_pConstantBuffer(nullptr) {}
-		~ConstantBufferDirectX11()
+		KtConstantBuffer() :m_pConstantBuffer(nullptr) {}
+		~KtConstantBuffer()
 		{
 			SafeRelease(m_pConstantBuffer);
 		}

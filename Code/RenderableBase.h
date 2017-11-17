@@ -11,7 +11,8 @@ namespace KtLib
 	//今回使うものをSetup()ないで読み込む
 	//Render()内でKtRendererBase::描画機能を使って描画する
 
-	class KtVertexBufferBase;
+	class KtVertexBuffer;
+	class KtVertexBufferIndexed;
 
 
 
@@ -26,6 +27,17 @@ namespace KtLib
 	private:
 	};
 
+	//???Textureを継承するべき？???
+	class RenderableRenderTarget : public KtRenderableBase
+	{
+	public:
+		bool Setup()override;
+		void Render()override;
+
+	private:
+		KtVertexBuffer* m_pVtxBuffer;
+		//texture
+	};
 
 
 	class RenderableRect : public KtRenderableBase
@@ -36,7 +48,7 @@ namespace KtLib
 
 
 	private:
-		KtVertexBufferBase* m_pVtxBuffer;
+		KtVertexBuffer* m_pVtxBuffer;
 	};
 
 
@@ -88,6 +100,7 @@ namespace KtLib
 
 		void ZSortNearToFar();
 		void ZSortFarToNear();
+		void CameraCulling();
 
 		void SetZSortCameraTransform(const Transform& cameraTransform)
 		{

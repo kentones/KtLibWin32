@@ -1,38 +1,11 @@
 #include "pch.h"
 
 #include "RenderableBase.h"
-#include "RendererBase.h"
 #include "SystemBase.h"
+#include "Renderer_DirectX11.h"
 
 namespace KtLib
 {
-	struct Pos
-	{
-		float x, y, z;
-	};
-	struct Normal
-	{
-		float x, y, z;
-	};
-	struct UV
-	{
-		float u, v;
-	};
-	struct Color
-	{
-		float r, g, b, a;
-	};
-
-	struct Vertex
-	{
-		Pos pos;
-		Normal normal;
-		UV uv;
-		Color color;
-	};
-
-
-
 	bool RenderableRect::Setup()
 	{
 		// Create Vertex(using types from VertexStruct.h )
@@ -64,7 +37,7 @@ namespace KtLib
 		//Draw Primitive(or Primitive Indexed)
 
 		KtSystem::GetInstance()->GetRenderer()->SetVertexBuffer(m_pVtxBuffer);
-		KtSystem::GetInstance()->GetRenderer()->SetPrimitiveTopology(KtRendererBase::ePRIMITIVETOPOLOGY_TRIANGLESTRIP);
+		KtSystem::GetInstance()->GetRenderer()->SetPrimitiveTopology(KtRenderer::ePRIMITIVETOPOLOGY_TRIANGLESTRIP);
 		KtSystem::GetInstance()->GetRenderer()->DrawPrimitive(4);
 	}
 

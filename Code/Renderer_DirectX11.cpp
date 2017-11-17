@@ -9,7 +9,7 @@ using Microsoft::WRL::ComPtr;
 namespace
 {
 	// KtRendererBaseの primitive topologyをD3DX11に変換
-	static const D3D_PRIMITIVE_TOPOLOGY sc_PrimitiveTopologyTable[KtLib::KtRendererBase::ePrimitiveTopology::ePRIMITIVETOPOLOGY_MAX] =
+	static const D3D_PRIMITIVE_TOPOLOGY sc_PrimitiveTopologyTable[KtLib::KtRenderer::ePrimitiveTopology::ePRIMITIVETOPOLOGY_MAX] =
 	{
 		D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED,
 		D3D11_PRIMITIVE_TOPOLOGY_POINTLIST,
@@ -26,7 +26,7 @@ namespace KtLib
 	//////////////////////////////////////////////////////////////////////////////////
 	// Public
 	//////////////////////////////////////////////////////////////////////////////////
-	RendererDirectX11::RendererDirectX11() :
+	KtRenderer::KtRenderer() :
 		m_window(nullptr),
 		m_outputWidth(800),
 		m_outputHeight(600),
@@ -36,7 +36,7 @@ namespace KtLib
 
 
 
-	bool RendererDirectX11::Init(HWND window, int width, int height)
+	bool KtRenderer::Init(HWND window, int width, int height)
 	{
 		m_window = window;
 		m_outputWidth = std::max(width, 1);
@@ -48,11 +48,11 @@ namespace KtLib
 
 		return true;
 	}
-	void RendererDirectX11::Release()
+	void KtRenderer::Release()
 	{
 		//スマートポインターで作った物は削除しないように（自動で削除されるので）
 	}
-	void RendererDirectX11::Render()
+	void KtRenderer::Render()
 	{
 		// バックバッファをクリア
 		Clear();
@@ -69,27 +69,30 @@ namespace KtLib
 		Present();
 	}
 
-
+	void KtRenderer::PushToRenderLayer(KtRenderableBase* pRenderable, eRenderLayer eLayer)
+	{
+		m_RenderLayer[eLayer].PushBack(pRenderable);
+	}
 
 	// Message handlers
-	void RendererDirectX11::OnActivated()
+	void KtRenderer::OnActivated()
 	{
 		// TODO: Game is becoming active window.
 
 	}
-	void RendererDirectX11::OnDeactivated()
+	void KtRenderer::OnDeactivated()
 	{
 		// TODO: Game is becoming background window.
 	}
-	void RendererDirectX11::OnSuspending()
+	void KtRenderer::OnSuspending()
 	{
 		// TODO: Game is being power-suspended (or minimized).
 	}
-	void RendererDirectX11::OnResuming()
+	void KtRenderer::OnResuming()
 	{
 		// TODO: Game is being power-resumed (or returning from minimize).
 	}
-	void RendererDirectX11::OnWindowSizeChanged(int width, int height)
+	void KtRenderer::OnWindowSizeChanged(int width, int height)
 	{
 		m_outputWidth = std::max(width, 1);
 		m_outputHeight = std::max(height, 1);
@@ -100,10 +103,10 @@ namespace KtLib
 	}
 
 	// Vertex Buffer
-	bool RendererDirectX11::CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBufferBase* pOut)
+	bool KtRenderer::CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBuffer* pOut)
 	{
-		VertexBufferDirectX11* pOutBufferTemp = nullptr;
-		pOutBufferTemp = new VertexBufferDirectX11;
+		KtVertexBuffer* pOutBufferTemp = nullptr;
+		pOutBufferTemp = new KtVertexBuffer;
 		if (!pOutBufferTemp) 
 		{
 			return false;
@@ -124,14 +127,13 @@ namespace KtLib
 			return false;
 		}
 		pOutBufferTemp->m_SingleVertexBytes = singleVertexBytes;
-		pOutBufferTemp->m_VertexBufferType = KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEX;
 		pOut = pOutBufferTemp;
 		return true;
 	}
-	bool RendererDirectX11::CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut)
+	bool KtRenderer::CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferIndexed* pOut)
 	{
-		VertexBufferIndexedDirectX11* pOutBufferTemp = nullptr;
-		pOutBufferTemp = new VertexBufferIndexedDirectX11;
+		KtVertexBufferIndexed* pOutBufferTemp = nullptr;
+		pOutBufferTemp = new KtVertexBufferIndexed;
 		if (!pOutBufferTemp)
 		{
 			return false;
@@ -164,42 +166,30 @@ namespace KtLib
 			return false;
 		}
 		pOutBufferTemp->m_SingleVertexBytes = singleVertexBytes;
-		pOutBufferTemp->m_VertexBufferType = KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEXINDEXED;
 		pOut = pOutBufferTemp;
 
 		return true;
 
 	}
-	void RendererDirectX11::SetVertexBuffer(KtVertexBufferBase* const pIn)
+	void KtRenderer::SetVertexBuffer(KtVertexBuffer* const pIn)
 	{
-		switch ( pIn->GetType() )
-		{
-		case KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEX:
-			{
-				VertexBufferDirectX11* pTempIn = static_cast<VertexBufferDirectX11*>(pIn);
-				m_d3dContext->IASetVertexBuffers(0, 1, &pTempIn->m_pVtxBuffer, &pTempIn->m_SingleVertexBytes, 0);
-			}
-			break;
-
-		case KtVertexBufferBase::eVextexBufferType::eVERTEXBUFFERTYPE_DX11_VERTEXINDEXED:
-			{
-				VertexBufferIndexedDirectX11* pTempIn = static_cast<VertexBufferIndexedDirectX11*>(pIn);
-				m_d3dContext->IASetVertexBuffers(0, 1, &pTempIn->m_pVtxBuffer, &pTempIn->m_SingleVertexBytes, 0);
-				m_d3dContext->IASetIndexBuffer(pTempIn->m_pIdxBuffer, DXGI_FORMAT_R32_UINT, 0);
-			}
-			break;
-		}
+		m_d3dContext->IASetVertexBuffers(0, 1, &pIn->m_pVtxBuffer, &pIn->m_SingleVertexBytes, 0);
 	}
-	void RendererDirectX11::SetPrimitiveTopology(ePrimitiveTopology topology)
+	void KtRenderer::SetVertexBufferIndexed(KtVertexBufferIndexed* const pIn)
+	{
+		m_d3dContext->IASetVertexBuffers(0, 1, &pIn->m_pVtxBuffer, &pIn->m_SingleVertexBytes, 0);
+		m_d3dContext->IASetIndexBuffer(pIn->m_pIdxBuffer, DXGI_FORMAT_R32_UINT, 0);
+	}
+	void KtRenderer::SetPrimitiveTopology(ePrimitiveTopology topology)
 	{
 		m_d3dContext->IASetPrimitiveTopology(sc_PrimitiveTopologyTable[topology]);
 	}
 
 	// Constant Buffer
-	bool RendererDirectX11::CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBufferBase* pOut)
+	bool KtRenderer::CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBuffer* pOut)
 	{
-		ConstantBufferDirectX11* pOutBufferTemp = nullptr;
-		pOutBufferTemp = new ConstantBufferDirectX11;
+		KtConstantBuffer* pOutBufferTemp = nullptr;
+		pOutBufferTemp = new KtConstantBuffer;
 		if (!pOutBufferTemp)
 		{
 			return false;
@@ -218,54 +208,29 @@ namespace KtLib
 			return false;
 		}
 
-		pOutBufferTemp->m_ConstantBufferType = KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11;
 		pOut = pOutBufferTemp;
 		return true;
 
 	}
-	void RendererDirectX11::UpdateConstantBuffer(const void* pDataIn, KtConstantBufferBase* pOut)
+	void KtRenderer::UpdateConstantBuffer(const void* pDataIn, KtConstantBuffer* pOut)
 	{
-		switch (pOut->GetType())
-		{
-		case KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11:
-			{
-				ConstantBufferDirectX11* pTemp = static_cast<ConstantBufferDirectX11*>(pOut);
-				m_d3dContext->UpdateSubresource(pTemp->m_pConstantBuffer, 0, nullptr, pDataIn, 0, 0);
-			}
-			break;
-		}
+		m_d3dContext->UpdateSubresource(pOut->m_pConstantBuffer, 0, nullptr, pDataIn, 0, 0);
 	}
-	void RendererDirectX11::VSSetConstantBuffer(unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn)
+	void KtRenderer::VSSetConstantBuffer(unsigned int slot, unsigned int numBuffers, KtConstantBuffer* const pIn)
 	{
-		switch (pIn->GetType())
-		{
-		case KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11:
-			{
-				ConstantBufferDirectX11* pTemp = static_cast<ConstantBufferDirectX11*>(pIn);
-				m_d3dContext->VSSetConstantBuffers(slot, numBuffers, &pTemp->m_pConstantBuffer);
-			}
-			break;
-		}
+		m_d3dContext->VSSetConstantBuffers(slot, numBuffers, &pIn->m_pConstantBuffer);
 	}
-	void RendererDirectX11::PSSetConstantBuffer(unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn)
+	void KtRenderer::PSSetConstantBuffer(unsigned int slot, unsigned int numBuffers, KtConstantBuffer* const pIn)
 	{
-		switch (pIn->GetType())
-		{
-		case KtConstantBufferBase::eConstantBufferType::eCONSTANTBUFFERTYPE_DX11:
-			{
-				ConstantBufferDirectX11* pTemp = static_cast<ConstantBufferDirectX11*>(pIn);
-				m_d3dContext->PSSetConstantBuffers(slot, numBuffers, &pTemp->m_pConstantBuffer);
-			}
-		break;
-		}
+		m_d3dContext->PSSetConstantBuffers(slot, numBuffers, &pIn->m_pConstantBuffer);
 	}
 
 	// DrawPrimitive
-	void RendererDirectX11::DrawPrimitive(unsigned int totalVertex)
+	void KtRenderer::DrawPrimitive(unsigned int totalVertex)
 	{
 		m_d3dContext->Draw(totalVertex, 0);
 	}
-	void RendererDirectX11::DrawPrimitiveIndexed(unsigned int totalIndex)
+	void KtRenderer::DrawPrimitiveIndexed(unsigned int totalIndex)
 	{
 		m_d3dContext->DrawIndexed(totalIndex, 0, 0);
 	}
@@ -274,7 +239,7 @@ namespace KtLib
 	// Private
 	//////////////////////////////////////////////////////////////////////////////////
 	// Helper method to clear the back buffers.
-	void RendererDirectX11::Clear()
+	void KtRenderer::Clear()
 	{
 
 		// Clear the views.
@@ -289,7 +254,7 @@ namespace KtLib
 	}
 
 	// Presents the back buffer contents to the screen.
-	void RendererDirectX11::Present()
+	void KtRenderer::Present()
 	{
 		// The first argument instructs DXGI to block until VSync, putting the application
 		// to sleep until the next VSync. This ensures we don't waste any cycles rendering
@@ -308,7 +273,7 @@ namespace KtLib
 	}
 
 	// These are the resources that depend on the device.
-	void RendererDirectX11::CreateDevice()
+	void KtRenderer::CreateDevice()
 	{
 		UINT creationFlags = 0;
 
@@ -376,7 +341,7 @@ namespace KtLib
 	}
 
 	// Allocate all memory resources that change on a window SizeChanged event.
-	void RendererDirectX11::CreateResources()
+	void KtRenderer::CreateResources()
 	{
 		// Clear the previous window size specific context.
 		ID3D11RenderTargetView* nullViews[] = { nullptr };
@@ -473,7 +438,7 @@ namespace KtLib
 
 	}
 
-	void RendererDirectX11::OnDeviceLost()
+	void KtRenderer::OnDeviceLost()
 	{
 		// TODO: Add Direct3D resource cleanup here.
 
@@ -489,7 +454,7 @@ namespace KtLib
 		CreateResources();
 	}
 
-	void RendererDirectX11::RenderSetting(eRenderLayer eLayer)
+	void KtRenderer::RenderSetting(eRenderLayer eLayer)
 	{
 		//共通設定
 		

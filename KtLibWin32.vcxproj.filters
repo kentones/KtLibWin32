@@ -44,6 +44,9 @@
     <Filter Include="KtLib\Renderer\Shader">
       <UniqueIdentifier>{a061ca08-57ac-4c0c-9568-28e0fca93405}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KtLib\GameObject\Behavior">
+      <UniqueIdentifier>{c7b9d74a-94b0-4c71-8bdf-da73aa813e27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -51,9 +54,6 @@
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="Code\common_Template.h">
       <Filter>KtLib\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\RendererBase.h">
-      <Filter>KtLib\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Code\SceneBase.h">
       <Filter>KtLib\Scene</Filter>
@@ -79,20 +79,20 @@
     <ClInclude Include="Code\Component_Transform.h">
       <Filter>KtLib\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Code\GraphicBufferBase.h">
-      <Filter>KtLib\Renderer\GraphicBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="Code\GraphicBuffer_DirectX11.h">
       <Filter>KtLib\Renderer\GraphicBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Renderer_VertexStruct.h">
+      <Filter>KtLib\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\BehaviorBase.h">
+      <Filter>KtLib\GameObject\Behavior</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Code\RendererBase.cpp">
-      <Filter>KtLib\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Code\SceneBase.cpp">
       <Filter>KtLib\Scene</Filter>
     </ClCompile>
@@ -114,11 +114,11 @@
     <ClCompile Include="Code\Component_Transform.cpp">
       <Filter>KtLib\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Code\GraphicBufferBase.cpp">
-      <Filter>KtLib\Renderer\GraphicBuffer</Filter>
-    </ClCompile>
     <ClCompile Include="Code\GraphicBuffer_DirectX11.cpp">
       <Filter>KtLib\Renderer\GraphicBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\BehaviorBase.cpp">
+      <Filter>KtLib\GameObject\Behavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

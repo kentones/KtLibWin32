@@ -3,56 +3,116 @@
 #include <DirectXMath.h>
 #include <d3d11_1.h>
 #include "common_Template.h"
-#include "RendererBase.h"
+#include "RenderableBase.h"
 
 namespace KtLib
 {
 	class Transform;
 	class Vertex;
 	class Material;
+	class KtVertexBuffer;
+	class KtVertexBufferIndexed;
+	class KtConstantBuffer;
+	class KtRenderableBase;
 
-	class RendererDirectX11 : public KtRendererBase
+	class KtRenderer
 	{
 	public:
-		RendererDirectX11();
+		enum eRenderLayer
+		{//描画順番になる
+			eRENDERLAYER_2D_BG,
+			eRENDERLAYER_3D_SKYDOME,
+			eRENDERLAYER_3D_TERRAIN,
+			eRENDERLAYER_3D_OBJECT,
+			eRENDERLAYER_EFFECT,
+			eRENDERLAYER_UI,
+			eRENDERLAYER_FADE,
+			eRENDERLAYER_MAX
+		};
+		enum ePrimitiveTopology
+		{
+			ePRIMITIVETOPOLOGY_UNDEFINED,
+			ePRIMITIVETOPOLOGY_POINTLIST,
+			ePRIMITIVETOPOLOGY_LINELIST,
+			ePRIMITIVETOPOLOGY_LINESTRIP,
+			ePRIMITIVETOPOLOGY_TRIANGLELIST,
+			ePRIMITIVETOPOLOGY_TRIANGLESTRIP,
+			ePRIMITIVETOPOLOGY_MAX
+		};
+		enum eVertexShaderType
+		{
 
-		bool Init(HWND window, int width, int height)override;
-		void Release()override;
-		void Render()override;
+		};
+		enum ePixelShaderType
+		{
 
-		// Messages
-		void OnActivated()override;
-		void OnDeactivated()override;
-		void OnSuspending()override;
-		void OnResuming()override;
-		void OnWindowSizeChanged(int width, int height)override;
+		};
+		enum eInputLayoutType
+		{
+
+		};
 
 
-		void SetInputLayout( /* input layout type */ );
+		KtRenderer();
+
+		// Main Function
+		bool Init(HWND window, int width, int height);
+		void Release();
+		void Render();
+
+		// Windows Messages ( only call by Game.cpp )
+		void OnActivated();
+		void OnDeactivated();
+		void OnSuspending();
+		void OnResuming();
+		void OnWindowSizeChanged(int width, int height);
+
+		// Render Layer Access
+		void PushToRenderLayer(KtRenderableBase* pRenderable, eRenderLayer eLayer);	// このフレームに描画したいものをレイヤーに入れる（フレームことクリアされる）
+
+
+		// Setup Function ( will called by constructor )
+	private:
+		bool SetupAllVertexShader();	// 頂点シェーダー
+		bool SetupAllPixelShader();		// ピクセルシェーダー
+		bool SetupAllInputLayout();		// 頂点フォーマット
+		bool SetupGeneralTexture();		// システムによく使われる汎用テクスチャ
+
+
+	public:
+
+		// RenderTarget
+		void SetRenderTarget();
+		void ClearRenderTarget();//??
+		void ClearStencil();//??
+
+
+
+
 
 		// Shader
-		bool SetupShader(); //全体シェーダー設定
-		bool _CreateVertexShader();
 		void SetVertexShader( /* vertex shader */ );
-		bool _CreatePixelShader();
 		void SetPixelShader( /* pixel shader */ );
 		
+		// Rendering Function ( only call by Renderable class )
+		void SetInputLayout( /* input layout type */);
 
 		// Vertex Buffer (only call by Renderable class)
-		bool CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBufferBase* pOut)override;
-		bool CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferBase* pOut)override;
-		void SetVertexBuffer(KtVertexBufferBase* const pIn)override;
-		void SetPrimitiveTopology(ePrimitiveTopology topology)override;
+		bool CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBuffer* pOut);
+		bool CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferIndexed* pOut);
+		void SetVertexBuffer(KtVertexBuffer* const pIn);
+		void SetVertexBufferIndexed(KtVertexBufferIndexed* const pIn);
+		void SetPrimitiveTopology(ePrimitiveTopology topology);
 
 		// Constant Buffer (only call by Renderable class)
-		bool CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBufferBase* pOut );
-		void UpdateConstantBuffer( const void* pDataIn, KtConstantBufferBase* pOut );
-		void VSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn );
-		void PSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBufferBase* const pIn );
+		bool CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBuffer* pOut );
+		void UpdateConstantBuffer( const void* pDataIn, KtConstantBuffer* pOut );
+		void VSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBuffer* const pIn );
+		void PSSetConstantBuffer( unsigned int slot, unsigned int numBuffers, KtConstantBuffer* const pIn );
 
 
-		void DrawPrimitive( unsigned int totalVertex )override;
-		void DrawPrimitiveIndexed(unsigned int totalIndex)override;
+		void DrawPrimitive( unsigned int totalVertex );
+		void DrawPrimitiveIndexed( unsigned int totalIndex );
 
 
 		bool SetupInputLayout();
@@ -97,6 +157,12 @@ namespace KtLib
 		void OnDeviceLost();
 
 		void RenderSetting( eRenderLayer eLayer);
+
+
+
+		RenderLayer m_RenderLayer[eRENDERLAYER_MAX];
+
+
 
 		// Device resources.
 		HWND                                            m_window;

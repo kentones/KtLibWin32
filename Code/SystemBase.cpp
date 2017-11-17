@@ -3,7 +3,6 @@
 #include "SystemBase.h"
 #include "SceneBase.h"
 #include "common_Template.h"
-#include "RendererBase.h"
 #include "Renderer_DirectX11.h"
 
 namespace KtLib
@@ -126,7 +125,7 @@ namespace KtLib
 		SafeReleaseDelete(m_pRenderer);
 
 		//インスタンス作成
-		m_pRenderer = new RendererDirectX11;
+		m_pRenderer = new KtRenderer;
 		if (!m_pRenderer)
 		{
 			//Alert("failed new Renderer!");

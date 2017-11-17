@@ -7,15 +7,25 @@ namespace KtLib
 	class KtGameObjectBase
 	{
 	public:
-		virtual bool Setup()	= 0;
-		virtual bool Init()		= 0;
-		virtual void Release()	= 0;
-		virtual void Update()	= 0;
-		virtual void Render()	= 0;
+		virtual bool Setup() = 0;
+		virtual bool Init() = 0;
+		virtual void Release() = 0;
+		virtual void Update() = 0;
+		virtual void Render() = 0;
 
 	private:
+		//std::list< BehaviorBase*> m_CB;
 
 	};
+
+	//class Player : public CharacterBase
+	//{
+	//	KtRenderableBase* m_pRenderable;
+	//};
+
+
+
+
 
 
 	//ControllableCharacter

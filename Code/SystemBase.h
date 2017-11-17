@@ -3,7 +3,7 @@
 
 namespace KtLib
 {
-	class KtRendererBase;
+	class KtRenderer;
 	class KtSceneBase;
 
 	class KtSystem
@@ -26,7 +26,7 @@ namespace KtLib
 
 
 		//インスタンス取得関数
-		KtRendererBase*	GetRenderer() { return m_pRenderer; }
+		KtRenderer*	GetRenderer() { return m_pRenderer; }
 
 	private:
 		KtSystem() : m_pRenderer(nullptr), m_pCurrentScene(nullptr), m_pUtilityScene(nullptr) {}
@@ -41,7 +41,7 @@ namespace KtLib
 		// Debug
 
 		// Renderer
-		KtRendererBase*		m_pRenderer;
+		KtRenderer*		m_pRenderer;
 
 		// Time
 
