@@ -82,11 +82,11 @@
     <ClInclude Include="Code\GraphicBuffer_DirectX11.h">
       <Filter>KtLib\Renderer\GraphicBuffer</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Renderer_VertexStruct.h">
-      <Filter>KtLib\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Code\BehaviorBase.h">
       <Filter>KtLib\GameObject\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\common_Struct.h">
+      <Filter>KtLib\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

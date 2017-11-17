@@ -88,6 +88,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>External\DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -121,6 +122,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>External\DirectXTK\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -151,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Code\BehaviorBase.h" />
+    <ClInclude Include="Code\common_Struct.h" />
     <ClInclude Include="Code\common_Template.h" />
     <ClInclude Include="Code\Component_Transform.h" />
     <ClInclude Include="Code\Config.h" />
@@ -159,7 +162,6 @@
     <ClInclude Include="Code\GraphicBuffer_DirectX11.h" />
     <ClInclude Include="Code\RenderableBase.h" />
     <ClInclude Include="Code\Renderer_DirectX11.h" />
-    <ClInclude Include="Code\Renderer_VertexStruct.h" />
     <ClInclude Include="Code\SceneBase.h" />
     <ClInclude Include="Code\SystemBase.h" />
     <ClInclude Include="Game.h" />

@@ -41,6 +41,21 @@
 #include <memory>
 #include <stdexcept>
 
+#include "CommonStates.h"
+#include "DDSTextureLoader.h"
+#include "Effects.h"
+#include "GamePad.h"
+#include "GeometricPrimitive.h"
+#include "Keyboard.h"
+#include "Model.h"
+#include "Mouse.h"
+#include "PrimitiveBatch.h"
+#include "SimpleMath.h"
+#include "SpriteBatch.h"
+#include "SpriteFont.h"
+#include "VertexTypes.h"
+
+
 namespace DX
 {
     inline void ThrowIfFailed(HRESULT hr)
