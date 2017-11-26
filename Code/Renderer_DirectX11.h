@@ -15,8 +15,11 @@ namespace KtLib
 	class KtConstantBuffer;
 	class KtRenderableBase;
 
+
 	class KtRenderer
 	{
+		friend class KtVertexShader;
+
 	public:
 		enum eRenderLayer
 		{//描画順番になる
@@ -47,10 +50,6 @@ namespace KtLib
 		{
 
 		};
-		enum eInputLayoutType
-		{
-
-		};
 
 
 		KtRenderer();
@@ -75,7 +74,6 @@ namespace KtLib
 	private:
 		bool SetupAllVertexShader();	// 頂点シェーダー
 		bool SetupAllPixelShader();		// ピクセルシェーダー
-		bool SetupAllInputLayout();		// 頂点フォーマット
 		bool SetupGeneralTexture();		// システムによく使われる汎用テクスチャ
 
 
@@ -95,7 +93,6 @@ namespace KtLib
 		void SetPixelShader( /* pixel shader */ );
 		
 		// Rendering Function ( only call by Renderable class )
-		void SetInputLayout( /* input layout type */);
 
 		// Vertex Buffer (only call by Renderable class)
 		bool CreateVertexBuffer(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, KtVertexBuffer* pOut);
@@ -115,9 +112,18 @@ namespace KtLib
 		void DrawPrimitiveIndexed( unsigned int totalIndex );
 
 
-		bool SetupInputLayout();
 		bool SetupSampler();
 		void SetSampler();
+
+		// Only for friend class
+		ID3D11Device1* GetDevice()
+		{
+			return m_d3dDevice.Get();
+		}
+		ID3D11DeviceContext1* GetDeviceContext()
+		{
+			return m_d3dContext.Get();
+		}
 
 
 		//////////////////////////////////////////////////////////////////////////////////
@@ -157,7 +163,6 @@ namespace KtLib
 		void OnDeviceLost();
 
 		void RenderSetting( eRenderLayer eLayer);
-
 
 
 		RenderLayer m_RenderLayer[eRENDERLAYER_MAX];

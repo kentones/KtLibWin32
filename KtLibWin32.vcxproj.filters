@@ -88,6 +88,12 @@
     <ClInclude Include="Code\common_Struct.h">
       <Filter>KtLib\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Code\VertexShader.h">
+      <Filter>KtLib\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\PixelShader.h">
+      <Filter>KtLib\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -119,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="Code\BehaviorBase.cpp">
       <Filter>KtLib\GameObject\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\VertexShader.cpp">
+      <Filter>KtLib\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\PixelShader.cpp">
+      <Filter>KtLib\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
