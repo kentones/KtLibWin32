@@ -4,39 +4,31 @@
 namespace KtLib
 {
 
-	class KtPixelShaderBase
+	class KtPixelShader
 	{
 	public:
-		KtPixelShaderBase() : m_pPixelShader(nullptr)
+		KtPixelShader(WCHAR* szFileName) : m_pPixelShader(nullptr), m_InitSuccess(false)
 		{
-			Init();
+			m_InitSuccess = InitShaderFromFile(szFileName);
 		}
-		virtual ~KtPixelShaderBase()
+		~KtPixelShader()
 		{
 			SafeRelease(m_pPixelShader);
+			m_InitSuccess = false;
 		}
-
+		const bool IsInitialized()const;
 		void SetPixelShader();
 
-	protected:
-		virtual bool Init() = 0;
+	private:
+		KtPixelShader();
+		KtPixelShader(const KtPixelShader&) {}
+		void operator=(const KtPixelShader& src) {}
+
 		bool InitShaderFromFile(WCHAR* szFileName);
 
-	private:
 		HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
 		ID3D11PixelShader*		m_pPixelShader;
-
+		bool					m_InitSuccess;
 	};
-
-	class PixelShaderBasic : public KtPixelShaderBase
-	{
-	public:
-		
-	private:
-		bool Init()override;
-		
-	};
-
-
 }	//namespace KtLib

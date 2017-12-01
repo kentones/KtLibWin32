@@ -4,42 +4,37 @@
 namespace KtLib
 {
 
-	class KtVertexShaderBase
+	class KtVertexShader
 	{
 	public:
-		KtVertexShaderBase() : m_pVertexShader(nullptr), m_pInputLayout(nullptr)
+		KtVertexShader(WCHAR* szFileName, D3D11_INPUT_ELEMENT_DESC layout[], unsigned int elementLayoutSize, D3D_PRIMITIVE_TOPOLOGY ePrimtiveTopology) : m_pVertexShader(nullptr), m_pInputLayout(nullptr), m_InitSuccess(false)
 		{
-			Init();
+			m_InitSuccess = InitShaderFromFile(szFileName, layout, elementLayoutSize);
+			SetPrimtiveTopology(ePrimtiveTopology);
 		}
-		virtual ~KtVertexShaderBase()
+		~KtVertexShader()
 		{
 			SafeRelease(m_pVertexShader);
 			SafeRelease(m_pInputLayout);
+			m_InitSuccess = false;
 		}
-
+		const bool IsInitialized()const;
 		void SetVertexShader();
 
-	protected:
-		virtual bool Init() = 0;
+	private:
+		KtVertexShader();
+		KtVertexShader(const KtVertexShader&) {}
+		void operator=(const KtVertexShader& src) {}
+
 		bool InitShaderFromFile(WCHAR* szFileName, D3D11_INPUT_ELEMENT_DESC layout[], unsigned int elementLayoutSize);
 		void SetPrimtiveTopology(D3D_PRIMITIVE_TOPOLOGY ePrimtiveTopology);
 
-	private:
 		HRESULT CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut);
 
 		ID3D11VertexShader*		m_pVertexShader;
 		ID3D11InputLayout*		m_pInputLayout;
 		D3D_PRIMITIVE_TOPOLOGY	m_PrimtiveTopology;
-
-	};
-
-	class VertexShaderBasic : public KtVertexShaderBase
-	{
-	public:
-		
-	private:
-		bool Init()override;
-		
+		bool					m_InitSuccess;
 	};
 
 

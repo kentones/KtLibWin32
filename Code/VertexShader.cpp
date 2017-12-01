@@ -8,15 +8,19 @@
 
 namespace KtLib
 {
-	void KtVertexShaderBase::SetVertexShader()
+	void KtVertexShader::SetVertexShader()
 	{
 		KtSystem::GetInstance()->GetRenderer()->GetDeviceContext()->VSSetShader(m_pVertexShader, nullptr, 0);
 		KtSystem::GetInstance()->GetRenderer()->GetDeviceContext()->IASetInputLayout(m_pInputLayout);
 	}
 
+	const bool KtVertexShader::IsInitialized()const
+	{
+		return m_InitSuccess;
+	}
 
 	
-	HRESULT KtVertexShaderBase::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+	HRESULT KtVertexShader::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 	{
 		HRESULT hr = S_OK;
 
@@ -49,17 +53,16 @@ namespace KtLib
 		return S_OK;
 	}
 	// protected init helper
-	bool KtVertexShaderBase::InitShaderFromFile(WCHAR* szFileName, D3D11_INPUT_ELEMENT_DESC layout[], unsigned int elementLayoutSize)
+	bool KtVertexShader::InitShaderFromFile(WCHAR* szFileName, D3D11_INPUT_ELEMENT_DESC layout[], unsigned int elementLayoutSize)
 	{
 		HRESULT hr;
 		
 		// Compile the vertex shader
 		ID3DBlob* pVSBlob = nullptr;
-		hr = CompileShaderFromFile(szFileName, "VS", "vs_4_0", &pVSBlob);
+		hr = CompileShaderFromFile(szFileName, "VS", "vs_5_0", &pVSBlob);
 		if (FAILED(hr))
 		{
-			MessageBox(nullptr,
-				L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
+			MessageBox(nullptr,	L"The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.", L"Error", MB_OK);
 			return false;
 		}
 
@@ -89,12 +92,12 @@ namespace KtLib
 		return true;
 	}
 
-	void KtVertexShaderBase::SetPrimtiveTopology(D3D_PRIMITIVE_TOPOLOGY ePrimtiveTopology)
+	void KtVertexShader::SetPrimtiveTopology(D3D_PRIMITIVE_TOPOLOGY ePrimtiveTopology)
 	{
 		m_PrimtiveTopology = ePrimtiveTopology;
 	}
 
-
+	/*
 	bool VertexShaderBasic::Init()
 	{
 		SetPrimtiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -105,12 +108,11 @@ namespace KtLib
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL"	, 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
-		unsigned int numElements = ARRAYSIZE(layout);
 
 		// Compile the vertex shader
 		return InitShaderFromFile(L"code/Shader/BasicEffect.fx", layout, ARRAYSIZE(layout));
 	}
-
+	*/
 
 
 }	//namespace KtLib

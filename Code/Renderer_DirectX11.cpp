@@ -2,23 +2,11 @@
 
 #include "Renderer_DirectX11.h"
 #include "GraphicBuffer_DirectX11.h"
+#include "VertexShader.h"
+#include "PixelShader.h"
 
 using namespace DirectX;
 using Microsoft::WRL::ComPtr;
-
-namespace
-{
-	// KtRendererBaseの primitive topologyをD3DX11に変換
-	static const D3D_PRIMITIVE_TOPOLOGY sc_PrimitiveTopologyTable[KtLib::KtRenderer::ePrimitiveTopology::ePRIMITIVETOPOLOGY_MAX] =
-	{
-		D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED,
-		D3D11_PRIMITIVE_TOPOLOGY_POINTLIST,
-		D3D11_PRIMITIVE_TOPOLOGY_LINELIST,
-		D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP,
-		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
-		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP
-	};
-}
 
 
 namespace KtLib
@@ -46,10 +34,22 @@ namespace KtLib
 
 		CreateResources();
 
+		SetupAllVertexShader();
+		SetupAllPixelShader();
+
 		return true;
 	}
 	void KtRenderer::Release()
 	{
+		for (int i = 0; i < eVERTEXSHADER_MAX; i++)
+		{
+			SafeDelete(m_apVertexShader[i]);
+		}
+		for (int i = 0; i < ePIXELSHADER_MAX; i++)
+		{
+			SafeDelete(m_apPixelShader[i]);
+		}
+
 		//スマートポインターで作った物は削除しないように（自動で削除されるので）
 	}
 	void KtRenderer::Render()
@@ -180,10 +180,7 @@ namespace KtLib
 		m_d3dContext->IASetVertexBuffers(0, 1, &pIn->m_pVtxBuffer, &pIn->m_SingleVertexBytes, 0);
 		m_d3dContext->IASetIndexBuffer(pIn->m_pIdxBuffer, DXGI_FORMAT_R32_UINT, 0);
 	}
-	void KtRenderer::SetPrimitiveTopology(ePrimitiveTopology topology)
-	{
-		m_d3dContext->IASetPrimitiveTopology(sc_PrimitiveTopologyTable[topology]);
-	}
+	
 
 	// Constant Buffer
 	bool KtRenderer::CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBuffer* pOut)
@@ -484,10 +481,18 @@ namespace KtLib
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
-	// Vertex Buffer
+	// Vertex Shader
 	//////////////////////////////////////////////////////////////////////////////////
 		// Public
 		//////////////////////////////////////////////////////////////////////////////////
+	void KtRenderer::SetVertexShader(eVertexShaderType eVSType)
+	{
+		m_apVertexShader[eVSType]->SetVertexShader();
+	}
+	void KtRenderer::SetPixelShader(ePixelShaderType ePSType)
+	{
+		m_apPixelShader[ePSType]->SetPixelShader();
+	}
 
 
 
@@ -496,6 +501,48 @@ namespace KtLib
 		//////////////////////////////////////////////////////////////////////////////////
 		// Private
 		//////////////////////////////////////////////////////////////////////////////////
+	bool KtRenderer::SetupAllVertexShader()
+	{
+		{
+			D3D11_INPUT_ELEMENT_DESC layout[] =
+			{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "NORMAL"	, 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
+			m_apVertexShader[eVERTEXSHADER_TEST] = new KtVertexShader(L"Shader/FX_Rectangle2D.fx", layout, ARRAYSIZE(layout), D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		}
+		{
+			D3D11_INPUT_ELEMENT_DESC layout[] =
+			{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "NORMAL"	, 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
+			m_apVertexShader[eVERTEXSHADER_PHONE] = new KtVertexShader(L"Shader/FX_Rectangle2D.fx", layout, ARRAYSIZE(layout), D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		}
+
+		for (int i = 0; i < eVERTEXSHADER_MAX; i++)
+		{
+			if (!m_apVertexShader[i]->IsInitialized())
+			{	return false;	}
+		}
+		return true;
+	}
+
+	bool KtRenderer::SetupAllPixelShader() 
+	{
+		m_apPixelShader[ePIXELSHADER_TEST]	= new KtPixelShader(L"Shader/FX_Rectangle2D.fx");
+		m_apPixelShader[ePIXELSHADER_PHONE] = new KtPixelShader(L"Shader/FX_Rectangle2D.fx");
+		m_apPixelShader[ePIXELSHADER_BLINN] = new KtPixelShader(L"Shader/FX_Rectangle2D.fx");
+
+		for (int i = 0; i < ePIXELSHADER_MAX; i++)
+		{
+			if (!m_apPixelShader[i]->IsInitialized())
+			{	return false;	}
+		}
+		return true;
+	}
 
 
 

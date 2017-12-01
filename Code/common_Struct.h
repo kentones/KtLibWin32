@@ -15,24 +15,33 @@ namespace KtLib
 	typedef DirectX::SimpleMath::Ray		KtRay;
 
 
-	//âºÅiñºëOÇà”ñ°ï™Ç©ÇÈÇÊÇ§Ç…Ç∑Ç◊Ç´Åj
-	struct SimpleVertex2D
-	{
-		KtVector2 pos;
-	};
-	struct SimpleVertex3D
-	{
-		KtVector3	pos;
-		KtVector3	normal;
-		KtColor		color;
-	};
-	struct Vertex3D
+	struct VertexPosNorTex
 	{
 		KtVector3	pos;
 		KtVector3	normal;
 		KtVector2	uv;
-		KtColor		color;
+
+		void SetValue(const KtVector3& posRef, const KtVector3& normalRef, const KtVector2& uvRef)
+		{
+			pos		= posRef;
+			normal	= normalRef;
+			uv		= uvRef;
+		}
 	};
+	struct VertexPosNorCol
+	{
+		KtVector3	pos;
+		KtVector3	normal;
+		KtColor		color;
+
+		void SetValue(const KtVector3& posRef, const KtVector3& normalRef, const KtColor& colorRef)
+		{
+			pos		= posRef;
+			normal	= normalRef;
+			color	= colorRef;
+		}
+	};
+
 
 	//skin vertex
 

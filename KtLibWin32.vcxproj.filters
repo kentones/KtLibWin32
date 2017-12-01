@@ -146,4 +146,15 @@
       <Filter>Assets</Filter>
     </Manifest>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\FX_Rectangle2D.fx">
+      <Filter>KtLib\Renderer\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\FX_Rectangle2D_PS.hlsl">
+      <Filter>KtLib\Renderer\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\FX_Rectangle2D_VS.hlsl">
+      <Filter>KtLib\Renderer\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>

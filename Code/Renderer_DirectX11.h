@@ -14,42 +14,41 @@ namespace KtLib
 	class KtVertexBufferIndexed;
 	class KtConstantBuffer;
 	class KtRenderableBase;
+	class KtVertexShader;
+	class KtPixelShader;
 
+	enum eRenderLayer
+	{//ï`âÊèáî‘Ç…Ç»ÇÈ
+		eRENDERLAYER_2D_BG,
+		eRENDERLAYER_3D_SKYDOME,
+		eRENDERLAYER_3D_TERRAIN,
+		eRENDERLAYER_3D_OBJECT,
+		eRENDERLAYER_EFFECT,
+		eRENDERLAYER_UI,
+		eRENDERLAYER_FADE,
+		eRENDERLAYER_MAX
+	};
+
+	enum eVertexShaderType
+	{
+		eVERTEXSHADER_TEST,
+		eVERTEXSHADER_PHONE,
+
+		eVERTEXSHADER_MAX
+	};
+	enum ePixelShaderType
+	{
+		ePIXELSHADER_TEST,
+		ePIXELSHADER_PHONE,
+		ePIXELSHADER_BLINN,
+
+		ePIXELSHADER_MAX
+	};
 
 	class KtRenderer
 	{
-		friend class KtVertexShader;
-
 	public:
-		enum eRenderLayer
-		{//ï`âÊèáî‘Ç…Ç»ÇÈ
-			eRENDERLAYER_2D_BG,
-			eRENDERLAYER_3D_SKYDOME,
-			eRENDERLAYER_3D_TERRAIN,
-			eRENDERLAYER_3D_OBJECT,
-			eRENDERLAYER_EFFECT,
-			eRENDERLAYER_UI,
-			eRENDERLAYER_FADE,
-			eRENDERLAYER_MAX
-		};
-		enum ePrimitiveTopology
-		{
-			ePRIMITIVETOPOLOGY_UNDEFINED,
-			ePRIMITIVETOPOLOGY_POINTLIST,
-			ePRIMITIVETOPOLOGY_LINELIST,
-			ePRIMITIVETOPOLOGY_LINESTRIP,
-			ePRIMITIVETOPOLOGY_TRIANGLELIST,
-			ePRIMITIVETOPOLOGY_TRIANGLESTRIP,
-			ePRIMITIVETOPOLOGY_MAX
-		};
-		enum eVertexShaderType
-		{
 
-		};
-		enum ePixelShaderType
-		{
-
-		};
 
 
 		KtRenderer();
@@ -89,8 +88,8 @@ namespace KtLib
 
 
 		// Shader
-		void SetVertexShader( /* vertex shader */ );
-		void SetPixelShader( /* pixel shader */ );
+		void SetVertexShader(eVertexShaderType eVSType);
+		void SetPixelShader(ePixelShaderType ePSType);
 		
 		// Rendering Function ( only call by Renderable class )
 
@@ -99,7 +98,6 @@ namespace KtLib
 		bool CreateVertexBufferIndexed(void* const pVertexDataIn, unsigned int singleVertexBytes, unsigned int totalVertex, unsigned int* const pIndexDataIn, unsigned int totalIndex, KtVertexBufferIndexed* pOut);
 		void SetVertexBuffer(KtVertexBuffer* const pIn);
 		void SetVertexBufferIndexed(KtVertexBufferIndexed* const pIn);
-		void SetPrimitiveTopology(ePrimitiveTopology topology);
 
 		// Constant Buffer (only call by Renderable class)
 		bool CreateConstantBuffer( unsigned int structSizeBytes, KtConstantBuffer* pOut );
@@ -168,6 +166,14 @@ namespace KtLib
 		RenderLayer m_RenderLayer[eRENDERLAYER_MAX];
 
 
+		// Shader
+		KtVertexShader* m_apVertexShader[eVERTEXSHADER_MAX] = {};
+		KtPixelShader*	m_apPixelShader[ePIXELSHADER_MAX]	= {};
+
+
+
+
+
 
 		// Device resources.
 		HWND                                            m_window;
@@ -181,7 +187,6 @@ namespace KtLib
 		Microsoft::WRL::ComPtr<IDXGISwapChain1>         m_swapChain;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  m_renderTargetView;
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  m_depthStencilView;
-
 
 	};
 

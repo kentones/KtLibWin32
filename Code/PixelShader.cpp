@@ -8,12 +8,18 @@
 
 namespace KtLib
 {
-	void KtPixelShaderBase::SetPixelShader()
+	void KtPixelShader::SetPixelShader()
 	{
 		KtSystem::GetInstance()->GetRenderer()->GetDeviceContext()->PSSetShader(m_pPixelShader, nullptr, 0);
 	}
-	
-	HRESULT KtPixelShaderBase::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+
+	const bool KtPixelShader::IsInitialized()const
+	{
+		return m_InitSuccess;
+	}
+
+
+	HRESULT KtPixelShader::CompileShaderFromFile(WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 	{
 		HRESULT hr = S_OK;
 
@@ -44,14 +50,13 @@ namespace KtLib
 
 		return S_OK;
 	}
-	// protected init helper
-	bool KtPixelShaderBase::InitShaderFromFile(WCHAR* szFileName)
+	bool KtPixelShader::InitShaderFromFile(WCHAR* szFileName)
 	{
 		HRESULT hr;
 		
 		// Compile the pixel shader
 		ID3DBlob* pPSBlob = nullptr;
-		hr = CompileShaderFromFile(szFileName, "PS", "ps_4_0", &pPSBlob);
+		hr = CompileShaderFromFile(szFileName, "PS", "ps_5_0", &pPSBlob);
 		if (FAILED(hr))
 		{
 			MessageBox(nullptr,
@@ -76,15 +81,5 @@ namespace KtLib
 
 		return true;
 	}
-
-
-
-	bool PixelShaderBasic::Init()
-	{
-		// Compile the vertex shader
-		return InitShaderFromFile(L"code/Shader/BasicEffect.fx");
-	}
-
-
 
 }	//namespace KtLib

@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
 #include "Component_Transform.h"
+#include "common_Struct.h"
 
 namespace KtLib
 {
+	//Layerèâä˙ÉTÉCÉY
 	static const int sc_RenderLayer_DefRenderable = 1000;
 
 	//resource list
@@ -46,9 +48,20 @@ namespace KtLib
 		bool Setup()override;
 		void Render()override;
 
+		void UpdatePos(float x, float y);
+		void UpdateSize(float sizeX, float sizeY);
+		void UpdateViewport( float viewPortWidth, float viewPortHeight);
+		void UpdateColor(float r, float g, float b, float a);
 
 	private:
-		KtVertexBuffer* m_pVtxBuffer;
+		KtVertexBuffer*		m_pVtxBuffer;
+		KtConstantBuffer*	m_pConstantBuffer;
+		VertexPosNorCol		m_Vtx[4];
+		KtVector2			m_Pos;
+		KtVector2			m_Size;
+		KtVector2			m_ViewportSize;
+		KtColor				m_Color;
+
 	};
 
 
